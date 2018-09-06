@@ -1,3 +1,4 @@
+%% Clean memory commands
 clear all; % Clean all the memory
 clc; % Clear command window
 
