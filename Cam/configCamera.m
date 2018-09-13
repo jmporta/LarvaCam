@@ -48,6 +48,12 @@ function configCamera(nDeviceNo,nChildNo)
   [nRet, nErrorCode] = PDC_SetPartitionList(nDeviceNo, nChildNo, nCount, nBlocks);
   checkError(nRet,nErrorCode);
   
+  % Trigger input mode
+  nMode=g.PDC_EXT_IN_TRIGGER_NEGA;
+  nPort=2;
+  [nRet, nErrorCode] = PDC_SetExternalInMode(nDeviceNo, nPort, nMode);
+  checkError(nRet,nErrorCode);
+  
   % just for curiosity, get the maximum number of frames that fit in memory
   %[nRet, nFrames, nBlocks, nErrorCode] = PDC_GetMaxFrames(nDeviceNo, nChildNo); % nFrames that can be stored in memory
   %checkError(nRet,nErrorCode);

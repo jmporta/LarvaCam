@@ -10,7 +10,7 @@ function record(nDeviceNo,nChildNo,handles,block,nt)
   
   % Do the steps
   for i=1:nt
-    display('Step',nt,': Events running...');
+    disp(['Step',num2str(nt),': Events running...']);
     start_events(handles);
     java.lang.Thread.sleep(180);
   end
