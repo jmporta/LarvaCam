@@ -1,21 +1,27 @@
-function record(nDeviceNo,nChildNo,handles,block,nt)
+function record(nDeviceNo,nChildNo,handles,expId,nt,offset)
   global g
   
   % Set camera to trigger-waiting mode
   [nRet, nErrorCode] = PDC_SetRecReady(nDeviceNo);
   checkError(nRet,nErrorCode);
   
-  % Set the events in one step
-  basic_events(handles);
-  
   % Do the steps
+  disp('Running steps...');
   for i=1:nt
-    disp(['Step',num2str(nt),': Events running...']);
+    disp(['Step ',num2str(i),': Eventssss running...']);
     start_events(handles);
-    java.lang.Thread.sleep(180);
+    java.lang.Thread.sleep(2000);
+    
+    done = false;
+    while(~done)
+      done=events_are_done(handles);
+    end
+    disp(['Step ',num2str(i),' done.']);
+    
   end
+   disp('Steps done.');
   
-  % Stop recording -> return to live status
+  % Stop recording status -> return to live status
   [nRet, nErrorCode] = PDC_SetStatus(nDeviceNo, g.PDC_STATUS_LIVE);
   checkError(nRet,nErrorCode);
   waitState(nDeviceNo,g.PDC_STATUS_LIVE);
@@ -41,7 +47,7 @@ function record(nDeviceNo,nChildNo,handles,block,nt)
     vRate=uint32(30);
     
     for it=1:nt
-        nlpszFileName=sprintf('block_%u_step_%u.avi',block,it);
+        nlpszFileName=sprintf('expID_%u_step_%u.avi',expId,it-1+offset);
         
         disp(['Saving ' nlpszFileName]);
         

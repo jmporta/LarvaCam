@@ -1,26 +1,13 @@
-% Init some global variables
-initEnvironment;
+%% Clean Memory Commands
 
-% Open the connection with the camera
-[nDeviceNo, nChildNo]=initCamera;
+clear all; % Clean all the memory
+clc; % Clear command window
 
-% Configure the camera
-configCamera(nDeviceNo,nChildNo);
+%% Load Paths
 
-% Get an image, just to check that the camera actually works
-[nData,h]=getImage(nDeviceNo, nChildNo);
+disp('Loading environment...');
+initPaths;
 
-% Open the connection with the microcontroler
-micro=InitDevice(4);
+%% Launch Experiment GUI
 
-% Proceed to the experiment: record images (synchronized with vibration)
-record(nDeviceNo,nChildNo,micro,1,2);
-
-% Read video
-v=VideoReader('block_1_step_1.avi');
-
-% compare images
-imshowpair(getFrame(v,0),getFrame(v,10),'diff');
-
-% Stop the camera
-closeCamera(nDeviceNo);
+gui=fishGUI;

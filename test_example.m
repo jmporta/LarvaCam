@@ -9,7 +9,7 @@ port = 4; % microcontroller port (COM4)
 
 % Init some error global variables
 disp('Loading environment...');
-initEnvironment;
+initPaths;
 
 % Open the connection of the microcontroller
 disp('Opening microcontroller connection...');
@@ -22,7 +22,7 @@ ping(micro);
 
 % Loading the step events
 disp('Loading events...');
-basic_events(micro);
+setEvents(micro);
 
 %% Running the steps
 disp('Running steps...');

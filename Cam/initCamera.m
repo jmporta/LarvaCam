@@ -55,6 +55,11 @@ function [nDeviceNo, nChildNo]=initCamera
   % Detect the camera
   [nRet, nDetectNumInfo, nErrorCode] = PDC_DetectDevice(nInterfaceCode, nDetectNo, nDetectNum, nDetectParam);
   checkError(nRet,nErrorCode);
+  
+%   if  nDetectNumInfo.m_nDeviceNum == 0
+%       error('No cam detected!');
+%   end
+  
   DetectInfo = nDetectNumInfo.m_DetectInfo(1);
   
   % Open the connection to the camera
