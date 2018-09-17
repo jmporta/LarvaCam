@@ -1,4 +1,4 @@
-function record(nDeviceNo,nChildNo,handles,expId,nt,offset)
+function record(nDeviceNo,nChildNo,handles,expId,nSteps,offset,delayStep)
   global g
   
   % Set camera to trigger-waiting mode
@@ -6,17 +6,17 @@ function record(nDeviceNo,nChildNo,handles,expId,nt,offset)
   checkError(nRet,nErrorCode);
   
   % Do the steps
-  disp('Running steps...');
-  for i=1:nt
-    disp(['Step ',num2str(i),': Eventssss running...']);
+  disp(['Running steps of ',num2str(expId),' block...']);
+  for i=1:nSteps
+    disp(['Step ',num2str(i-1+offset),': Events running...']);
     start_events(handles);
-    java.lang.Thread.sleep(2000);
+    java.lang.Thread.sleep(delayStep);
     
     done = false;
     while(~done)
       done=events_are_done(handles);
     end
-    disp(['Step ',num2str(i),' done.']);
+    disp(['Step ',num2str(i-1+offset),' done.']);
     
   end
    disp('Steps done.');
@@ -36,7 +36,7 @@ function record(nDeviceNo,nChildNo,handles,expId,nt,offset)
   checkError(nRet,nErrorCode);
   frame1=fInfo.m_nStart;
   frame2=fInfo.m_nEnd;
-  frameTrigger=(frame2-frame1+1)/nt; % frames at each trigger
+  frameTrigger=(frame2-frame1+1)/nSteps; % frames at each trigger
   currentFrame=frame1-1; % First frame to save (numbering from 1!)
   
   disp(['Num frames     : ' num2str(frame2-frame1+1)]);
@@ -46,7 +46,7 @@ function record(nDeviceNo,nChildNo,handles,expId,nt,offset)
   t=clock;
     vRate=uint32(30);
     
-    for it=1:nt
+    for it=1:nSteps
         nlpszFileName=sprintf('expID_%u_step_%u.avi',expId,it-1+offset);
         
         disp(['Saving ' nlpszFileName]);

@@ -1,4 +1,4 @@
-function [micro,nDeviceNo, nChildNo]=initConnections(port)
+function [micro,nDeviceNo,nChildNo,connected]=initConnections(port)
 % Open microcontroller connection
 disp('Opening microcontroller connection...');
 micro=initDevice(port);
@@ -15,4 +15,6 @@ disp('Opening cam connection...');
 % Config cam
 disp('Configurating cam...');
 configCamera(nDeviceNo,nChildNo);
+
+connected = true;
 end

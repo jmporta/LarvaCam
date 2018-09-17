@@ -56,9 +56,9 @@ function [nDeviceNo, nChildNo]=initCamera
   [nRet, nDetectNumInfo, nErrorCode] = PDC_DetectDevice(nInterfaceCode, nDetectNo, nDetectNum, nDetectParam);
   checkError(nRet,nErrorCode);
   
-%   if  nDetectNumInfo.m_nDeviceNum == 0
-%       error('No cam detected!');
-%   end
+  if  nDetectNumInfo.m_nDeviceNum == 0
+      error('No cam detected!');
+  end
   
   DetectInfo = nDetectNumInfo.m_DetectInfo(1);
   
