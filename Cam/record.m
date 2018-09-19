@@ -1,4 +1,4 @@
-function record(nDeviceNo,nChildNo,handles,expId,nSteps,offset,delayStep)
+function saveTime=record(nDeviceNo,nChildNo,handles,expId,nSteps,offset,delayStep)
   global g
   
   % Set camera to trigger-waiting mode
@@ -10,15 +10,17 @@ function record(nDeviceNo,nChildNo,handles,expId,nSteps,offset,delayStep)
   for i=1:nSteps
     disp(['Step ',num2str(i-1+offset),': Events running...']);
     start_events(handles);
-    java.lang.Thread.sleep(delayStep);
     
     done = false;
     while(~done)
       done=events_are_done(handles);
     end
-    disp(['Step ',num2str(i-1+offset),' done.']);
     
+    java.lang.Thread.sleep(delayStep);
+    
+    disp(['Step ',num2str(i-1+offset),' done.']);
   end
+   t=clock;
    disp('Steps done.');
   
   % Stop recording status -> return to live status
@@ -43,7 +45,7 @@ function record(nDeviceNo,nChildNo,handles,expId,nSteps,offset,delayStep)
   disp(['Frames/trigger : ' num2str(frameTrigger)]);
   
   % Save
-  t=clock;
+ 
     vRate=uint32(30);
     
     for it=1:nSteps
@@ -63,12 +65,13 @@ function record(nDeviceNo,nChildNo,handles,expId,nSteps,offset,delayStep)
         [nRet, nErrorCode] = PDC_AVIFileSaveClose(nDeviceNo, nChildNo);
         checkError(nRet,nErrorCode);
     end
-    
-  disp(['Images saved in ' num2str(etime(clock,t)) ' sec']);
   
   % Return to the live status
   [nRet, nErrorCode] = PDC_SetStatus(nDeviceNo, g.PDC_STATUS_LIVE);
   checkError(nRet,nErrorCode);
   waitState(nDeviceNo,g.PDC_STATUS_LIVE);
   
+  saveTime =etime(clock,t);
+  
+  disp(['Images saved in ' num2str(saveTime) ' sec']);
 end

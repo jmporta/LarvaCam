@@ -16,5 +16,6 @@ disp('Opening cam connection...');
 disp('Configurating cam...');
 configCamera(nDeviceNo,nChildNo);
 
+disp('Ready to run the experiment.')
 connected = true;
 end

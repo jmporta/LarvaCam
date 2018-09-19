@@ -22,7 +22,7 @@ function varargout = fishGUI(varargin)
 
 % Edit the above text to modify the response to help fishGUI
 
-% Last Modified by GUIDE v2.5 14-Sep-2018 13:39:10
+% Last Modified by GUIDE v2.5 19-Sep-2018 10:35:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -44,7 +44,6 @@ end
 % End initialization code - DO NOT EDIT
 
 
-
 % --- Executes just before fishGUI is made visible.
 function fishGUI_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
@@ -62,15 +61,27 @@ handles.output = hObject;
 %% Initial GUI Data
 
 % Define the structure of the uitable
-handles.nColmn =3;
-set(handles.uitableData,'data',zeros(1,handles.nColmn));
+handles.nColmn =5;
+set(handles.uitableData,'data',[1 0 0.5 7020 1000]);
 
-%% Initial Conditions
+% connection flag
+handles.connected=false; 
 
-%TODO: Config file
-handles.port=4; % microcontroller port (COM4)
-handles.nSteps=10; % num of steps per block
-handles.connected=false; % connection flag
+%% Initial Experiment Conditions
+try
+   iData=loadData('initialData.dat');
+
+   % Assign the data. The first row is the header, omitted.
+   handles.freq=iData(2); % freq of the wave (1000 default)
+   handles.freqHz=iData(3); % Value of the freq discretization
+   handles.port=iData(4); % microcontroller port (COM4 default)
+   handles.tEvents = zeros(1,4); %init array
+   handles.tEvents = [iData(5) iData(6) iData(7) iData(8)]; % Delay times of the events
+   handles.tStep = iData(9); % Limit time to save an image between event steps
+catch
+   dialogbox=msgbox('The config. file does not has the proper format. Please, fix it and restart de program.', 'Wrong Data', 'warn');
+   uiwait(dialogbox); 
+end
 
 % Update handles structure
 guidata(hObject, handles);
@@ -92,12 +103,34 @@ function pushbuttonRun_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+
+
 % Get the table data
 tableData=get(handles.uitableData,'Data');
 
-% Run the experiment
-runExpTable(tableData,handles.nSteps,handles.micro,handles.nDeviceNo,handles.nChildNo);
+% Run the experiment through a table
 
+if checkDataTable(tableData) % Check the data table
+   
+    % Block the button while running
+    set(handles.pushbuttonRun,'Enable','off');
+
+    loopProgress(true);
+
+    % Run
+    runExpTable(tableData,handles.freq,handles.freqHz,handles.tEvents,handles.tStep,handles.micro,handles.nDeviceNo,handles.nChildNo);
+
+    loopProgress(false);
+    dialogbox=msgbox('Experiment done!', 'Success', 'help');
+    uiwait(dialogbox);
+
+    % Unblock the button
+    set(handles.pushbuttonRun,'Enable','on');
+
+else
+    dialogbox=msgbox({'The data of the table do not have the proper format. Check it.';'';'Remember:';''; '1- The cam cannot work with conflicting delay values.'; '          [delaySteps >= 7000]';'                              or';'          [delayBlock >= nSteps*7000]';''; '2- The range of all the parameter must be correct.'}, 'Error', 'error');
+    uiwait(dialogbox);
+end
 
 % --- Executes when user attempts to close figure1.
 function figure1_CloseRequestFcn(hObject, eventdata, handles)
@@ -105,12 +138,13 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Close the connections fo the cam and micro
+% Close the connections of the cam and the micro
 if handles.connected == true
     closeConnections(handles.nDeviceNo,handles.micro);
 end
 % Hint: delete(hObject) closes the figure
 delete(hObject);
+clear all;
 
 
 % --- Executes on button press in pushbuttonConnect.
@@ -120,6 +154,7 @@ function pushbuttonConnect_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Close divices connections and init devices connectons again
+
 if handles.connected == true
     set(handles.textConnect,'BackgroundColor','red');
     set(handles.textConnect,'String','Not Connected');
@@ -128,13 +163,22 @@ if handles.connected == true
     closeConnections(handles.nDeviceNo,handles.micro);
 end
 
-[handles.micro,handles.nDeviceNo,handles.nChildNo,handles.connected]=initConnections(handles.port);
+try
+	[handles.micro,handles.nDeviceNo,handles.nChildNo,handles.connected]=initConnections(handles.port);
+catch ME
+	errorMessage = sprintf('It is impossible to stablish the connection of the all setup components. Check the connections and try it again.', ME.message);
+	fprintf(1, '%s\n', errorMessage);
+	uiwait(warndlg(errorMessage));
+end
 
 if handles.connected == true
     set(handles.textConnect,'BackgroundColor','green');
     set(handles.textConnect,'String','Connected');
     set(handles.pushbuttonRun,'Enable','on');
 end
+
+% Update handles structure
+guidata(hObject, handles);
 
 % --- Executes on selection change in popupmenuNumBlocks.
 function popupmenuNumBlocks_Callback(hObject, eventdata, handles)
@@ -144,6 +188,8 @@ function popupmenuNumBlocks_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns popupmenuNumBlocks contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenuNumBlocks
+
+% Set the number of  the blocks (rows)
 nRows = get(hObject,'Value');
 set(handles.uitableData,'data',zeros(nRows,handles.nColmn)); % Redifine the dimensions of the uitable
 

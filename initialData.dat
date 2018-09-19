@@ -1,0 +1,9 @@
+0 % The modification of this file may produce unexpected behaviors and errors. Maintain the format and the order of the data. Every row must has a value and a comment. The first row is omitted.
+1000 % Frequency of the noise. (Default: 1000)
+500 % Value of the freuency discretization. (Default: 5000)
+4 % Connection port of the microprocessor.
+0.01 % Delay time, start cam. (Default: 0.01)
+0.03 % Delay time start light noise. (Default: 0.03)
+0.003 % Delay time, stop ligth noise. (Default: 0.003)
+0.087 % Delay time, stop cam. (Default: 0.087)
+7000 % Limit time to save an image between event steps (Default: 7000)
