@@ -21,11 +21,11 @@ open_device(micro);
 disp('Checking microcontroller connection...');
 ping(micro);
 
-
-amplitude=3; %peak-to-peak
-freq=10;
-freqStep= 250;
-tEvents=[0.01 0.03 1 0.087];
+% ampli: gain=30, varGain=max
+amplitude=0.6; %peak-to-peak
+freq=15;
+freqStep= 700;
+tEvents=[0.01 0.03 10 0.087];
 
 
 % Loading the step events
