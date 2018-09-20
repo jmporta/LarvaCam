@@ -12,13 +12,13 @@ function configCamera(nDeviceNo,nChildNo,framesToRec,framesRate,vWidth,vHeight)
   
   rMode=g.PDC_RECORDING_TYPE_READY_AND_TRIG; % record mode: Input the "REC"trigger after the camera is in the "READY" state.
   
-  nRate=uint32(framesRate); % 1000 frames/s
+  nRate=uint32(framesRate); % default 1000 frames/s
   
   nCount=uint32(1); % No. partitions
   nBlocks=uint32(0); % Partition blocks
   
-  nWidth=uint32(vWidth); % Image resolution 896
-  nHeight=uint32(vHeight);  % Image resolution 896
+  nWidth=uint32(vWidth); % Image resolution default 896
+  nHeight=uint32(vHeight);  % Image resolution default 896
   
   % ----------------------------------------------------------------
   % ----------------------------------------------------------------

@@ -68,8 +68,19 @@ set(handles.uitableData,'data',[1 0 0.5 7020 1000]);
 handles.connected=false; 
 
 %% Initial Cam Configuration
+try
+    % Load cam config. data from file
     cData=loadData('CamData.dat');
-    handles.camConf.
+    
+    % Assign the data. The first row is the header, omitted.
+    handles.camConf.framesToRec=cData(2);
+    handles.camConf.framesRate=cData(3);
+    handles.camConf.vWidth=cData(4);
+    handles.camConf.vHeight=cData(5);
+catch
+   dialogbox=msgbox('The config. file "camData.dat" does not has the proper format. Please, fix it and restart de program.', 'Wrong Data', 'warn');
+   uiwait(dialogbox);
+end
 
 %% Initial Experiment Conditions
 try
@@ -81,12 +92,24 @@ try
    handles.freqStep=iData(3); % Value of one step of the freq discretization
    handles.port=iData(4); % microcontroller port (COM4 default)
    handles.tEvents = zeros(1,4); %init array
-   handles.tEvents = [iData(5) iData(6) iData(7) iData(8)]; % Delay times of the events
+   handles.tEvents = [iData(5)/1000 iData(6)/1000 iData(7)/1000 iData(8)/1000]; % Delay times of the events (event works in s)
    handles.tStep = iData(9); % Limit time to save an image between event steps
 catch
-   dialogbox=msgbox('The config. file "initialData.dat" does not has the proper format. Please, fix it and restart de program.', 'Wrong Data', 'warn');
+   dialogbox=msgbox('The config. file "initialData.dat" does not has the proper format. Please, fix it and restart de program.', 'Wrong Data', 'error');
+   set(handles.pushbuttonConnect,'Enable','off');
+   set(handles.textConnect,'BackgroundColor','yellow');
+   set(handles.textConnect,'String','Invalid conf.');
    uiwait(dialogbox); 
 end
+
+if uint16((handles.camConf.framesToRec/handles.camConf.framesRate)*1000) < uint16((sum(handles.tEvents)-handles.tEvents(1))*1000)
+   dialogbox=msgbox('The time of the event step is larger than the cam recording time: FramesToRec/framesRate < sum_i(tEvents(i)). Please, fix it on the config files and restart de program.', 'Wrong Data', 'error');
+   set(handles.pushbuttonConnect,'Enable','off');
+   set(handles.textConnect,'BackgroundColor','yellow');
+   set(handles.textConnect,'String','Invalid conf.');
+   uiwait(dialogbox); 
+end
+    
 
 % Update handles structure
 guidata(hObject, handles);
@@ -125,16 +148,23 @@ try
 
     dialogbox=msgbox('Experiment done!', 'Success', 'help');
     uiwait(dialogbox);
+    
+    % Unblock the button
+    set(handles.pushbuttonRun,'Enable','on');
 catch ME
     dialogbox=msgbox(ME.message, 'Error', 'error');
+    
+    set(handles.textConnect,'BackgroundColor','red');
+    set(handles.textConnect,'String','Not Connected');
+    set(handles.pushbuttonRun,'Enable','off');
+    
     uiwait(dialogbox);
 end
 
 % Stop progress icon
 loopProgress(false);
 
-% Unblock the button
-set(handles.pushbuttonRun,'Enable','on');
+
 
 % --- Executes when user attempts to close figure1.
 function figure1_CloseRequestFcn(hObject, eventdata, handles)
@@ -168,9 +198,12 @@ if handles.connected == true
 end
 
 try
-	[handles.micro,handles.nDeviceNo,handles.nChildNo,handles.connected]=initConnections(handles.port);
+	[handles.micro,handles.nDeviceNo,handles.nChildNo,handles.connected]=initConnections(handles.port,handles.camConf);
 catch ME
     dialogbox=msgbox(ME.message, 'Error', 'error');
+    set(handles.textConnect,'BackgroundColor','red');
+    set(handles.textConnect,'String','Not Connected');
+    set(handles.pushbuttonRun,'Enable','off');
     uiwait(dialogbox);
 end
 

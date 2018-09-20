@@ -22,9 +22,9 @@ disp('Checking microcontroller connection...');
 ping(micro);
 
 
-amplitude=3.302;
-freq=50;
-freqStep= 500;
+amplitude=3; %peak-to-peak
+freq=10;
+freqStep= 250;
 tEvents=[0.01 0.03 1 0.087];
 
 

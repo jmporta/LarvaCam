@@ -1,4 +1,4 @@
-function [micro,nDeviceNo,nChildNo,connected]=initConnections(port)
+function [micro,nDeviceNo,nChildNo,connected]=initConnections(port,camConf)
 % Open microcontroller connection
 disp('Opening microcontroller connection...');
 micro=initDevice(port);
@@ -14,8 +14,7 @@ disp('Opening cam connection...');
 
 % Config cam
 disp('Configurating cam...');
-%configCamera(nDeviceNo,nChildNo,framesToRec,framesRate,vWidth,vHeight);
-configCamera(nDeviceNo,nChildNo,framesToRec,framesRate,vWidth,vHeight);
+configCamera(nDeviceNo,nChildNo,camConf.framesToRec,camConf.framesRate,camConf.vWidth,camConf.vHeight);
 
 disp('Ready to run the experiment.')
 connected = true;

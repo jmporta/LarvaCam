@@ -1,0 +1,5 @@
+0 % The modification of this file may produce unexpected behaviors and errors. Respect the format and the order of the data. Every row must has a value and a comment. The first row is omitted.
+120 % Frames to record after each trigger (Default: 120 frames)
+1000 % Frames rate (Default: 1000 frames/s)
+896 % Horizontal image resolution (Default: 896 px)
+896 % Vertical image resolution (Default: 896 px )

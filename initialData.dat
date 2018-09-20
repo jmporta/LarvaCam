@@ -1,9 +1,9 @@
 0 % The modification of this file may produce unexpected behaviors and errors. Respect the format and the order of the data. Every row must has a value and a comment. The first row is omitted.
-10 % Frequency of the noise. (Default: 1000 Hz)
+1000 % Frequency of the noise. (Default: 1000 Hz)
 50000 % Value of the time step of the frequency discretization. (Default: 5000)
 4 % Connection port of the microprocessor.
-0.01 % Delay time, start cam. (Default: 0.01 s)
-0.03 % Delay time start light noise. (Default: 0.03 s)
-0.003 % Delay time, stop ligth noise. (Default: 0.003 s)
-0.087 % Delay time, stop cam. (Default: 0.087 s)
+10 % Delay time, start cam. (Default: 10 ms)
+30 % Delay time start light noise. (Default: 30 ms)
+3 % Delay time, stop ligth noise. (Default: 3 ms)
+87 % Delay time, stop cam. (Default: 87 ms)
 7000 % Limit time to save an image between event steps (Default: 7000 ms)
