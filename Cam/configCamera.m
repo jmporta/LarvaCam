@@ -1,4 +1,4 @@
-function configCamera(nDeviceNo,nChildNo)
+function configCamera(nDeviceNo,nChildNo,framesToRec,framesRate,vWidth,vHeight)
   global g;
   
   % ----------------------------------------------------------------
@@ -7,18 +7,18 @@ function configCamera(nDeviceNo,nChildNo)
   
   tMode=g.PDC_TRIGGER_RANDOM; %manual
   nAFrames=uint32(0); % not used in random trigger mode
-  nRFrames=uint32(400); % Frames to record after each trigger 120
+  nRFrames=uint32(framesToRec); % Frames to record after each trigger, default 120
   nRCount=uint32(10); % not used in random trigger mode
   
   rMode=g.PDC_RECORDING_TYPE_READY_AND_TRIG; % record mode: Input the "REC"trigger after the camera is in the "READY" state.
   
-  nRate=uint32(5000); % 1000 frames/s
+  nRate=uint32(framesRate); % 1000 frames/s
   
   nCount=uint32(1); % No. partitions
   nBlocks=uint32(0); % Partition blocks
   
-  nWidth=uint32(896); % Image resolution 896
-  nHeight=uint32(896);  % Image resolution 896
+  nWidth=uint32(vWidth); % Image resolution 896
+  nHeight=uint32(vHeight);  % Image resolution 896
   
   % ----------------------------------------------------------------
   % ----------------------------------------------------------------
@@ -54,7 +54,7 @@ function configCamera(nDeviceNo,nChildNo)
   [nRet, nErrorCode] = PDC_SetExternalInMode(nDeviceNo, nPort, nMode);
   checkError(nRet,nErrorCode);
   
-  % just for curiosity, get the maximum number of frames that fit in memory
+  % Get the maximum number of frames that fit in memory
   %[nRet, nFrames, nBlocks, nErrorCode] = PDC_GetMaxFrames(nDeviceNo, nChildNo); % nFrames that can be stored in memory
   %checkError(nRet,nErrorCode);
   %disp(nFrames);

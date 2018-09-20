@@ -40,8 +40,6 @@ function handles=initDevice(port)
     disp('The dynamixel lib is already loaded.');
   else
     disp('Loading dynamixel lib...');
-    addpath('.\dxl_sdk_win64_v1_02\bin');
-    addpath('.\dxl_sdk_win64_v1_02\import');
     loadlibrary(handles.AliasLib,handles.AliasLib_h);
   end
   

@@ -1,4 +1,4 @@
-function check = checkDataTable(dataTable)
+function check = checkDataTable(dataTable,tStep)
 
 nBlocks = size(dataTable,1);
 
@@ -12,16 +12,20 @@ for i=1:nBlocks
     delayBlock = dataTable(i,5);
     
     if nSteps < 0
-        check = false;
+        ME=MException('WrongInput:error', 'The number of the steps must be positive.');
+        throw(ME); 
     end
     if light < 0 || light > 1
-        check = false;
+        ME=MException('WrongInput:error', 'The light value must be in interval [0,1].');
+        throw(ME); 
     end
     if amplitude < 0
-        check = false;
+        ME=MException('WrongInput:error', 'The max. acceleration must be positive.');
+        throw(ME); 
     end
-    if delayBlock < 7000*nSteps && delayStep < 7000
-        check = false;
+    if delayBlock < tStep*nSteps && delayStep < tStep
+        ME=MException('WrongInput:error', 'Conflicting delay values. The time limit (tStep=%d ms) to save an image is smaller than the delay step (delayStep=%d ms).',tStep,delayStep);
+        throw(ME); 
     end
 
 end

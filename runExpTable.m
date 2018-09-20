@@ -1,5 +1,5 @@
 % Run an experiment through a data table with amplitude,delayStep,delayBlock parameters 
-function runExpTable(dataTable,freq,freqHz,tEvents,tStep,micro,nDeviceNo,nChildNo)
+function runExpTable(dataTable,freq,freqStep,tEvents,tStep,micro,nDeviceNo,nChildNo)
 nBlocks=size(dataTable,1);
 offset=1;
 
@@ -11,7 +11,7 @@ for i=1:nBlocks
         delayStep=dataTable(i,4)-10; % ms (0.01 s from the initial event delay)
         delayBlock=dataTable(i,5); % ms
         
-        setEvents(micro,amplitude,light,freq,freqHz,tEvents);
+        setEvents(micro,amplitude,light,freq,freqStep,tEvents);
         
         if nSteps ~= 0
             if delayBlock >= tStep*nSteps %all steps, save final
@@ -25,6 +25,9 @@ for i=1:nBlocks
                      java.lang.Thread.sleep(delayStep-saveTime*1000);
                 end
                 java.lang.Thread.sleep(delayBlock);
+            else
+                ME=MException('ConflictingInputs:error','The time limit (tStep=%d ms) to save an image is smaller than the delay step (delayStep=%d ms).',tStep,delayStep);
+                throw(ME); 
             end
         end
         

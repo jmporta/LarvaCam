@@ -67,19 +67,24 @@ set(handles.uitableData,'data',[1 0 0.5 7020 1000]);
 % connection flag
 handles.connected=false; 
 
+%% Initial Cam Configuration
+    cData=loadData('CamData.dat');
+    handles.camConf.
+
 %% Initial Experiment Conditions
 try
+   % Load config. data from file
    iData=loadData('initialData.dat');
 
    % Assign the data. The first row is the header, omitted.
    handles.freq=iData(2); % freq of the wave (1000 default)
-   handles.freqHz=iData(3); % Value of the freq discretization
+   handles.freqStep=iData(3); % Value of one step of the freq discretization
    handles.port=iData(4); % microcontroller port (COM4 default)
    handles.tEvents = zeros(1,4); %init array
    handles.tEvents = [iData(5) iData(6) iData(7) iData(8)]; % Delay times of the events
    handles.tStep = iData(9); % Limit time to save an image between event steps
 catch
-   dialogbox=msgbox('The config. file does not has the proper format. Please, fix it and restart de program.', 'Wrong Data', 'warn');
+   dialogbox=msgbox('The config. file "initialData.dat" does not has the proper format. Please, fix it and restart de program.', 'Wrong Data', 'warn');
    uiwait(dialogbox); 
 end
 
@@ -103,34 +108,33 @@ function pushbuttonRun_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-
-
 % Get the table data
 tableData=get(handles.uitableData,'Data');
 
-% Run the experiment through a table
+% Block the button while running
+set(handles.pushbuttonRun,'Enable','off');  
 
-if checkDataTable(tableData) % Check the data table
-   
-    % Block the button while running
-    set(handles.pushbuttonRun,'Enable','off');
+% Start progress icon
+loopProgress(true);
 
-    loopProgress(true);
+try
+    checkDataTable(tableData,handles.tStep) % Check the data table
 
-    % Run
-    runExpTable(tableData,handles.freq,handles.freqHz,handles.tEvents,handles.tStep,handles.micro,handles.nDeviceNo,handles.nChildNo);
+    % Run the experiment through a table
+    runExpTable(tableData,handles.freq,handles.freqStep,handles.tEvents,handles.tStep,handles.micro,handles.nDeviceNo,handles.nChildNo);
 
-    loopProgress(false);
     dialogbox=msgbox('Experiment done!', 'Success', 'help');
     uiwait(dialogbox);
-
-    % Unblock the button
-    set(handles.pushbuttonRun,'Enable','on');
-
-else
-    dialogbox=msgbox({'The data of the table do not have the proper format. Check it.';'';'Remember:';''; '1- The cam cannot work with conflicting delay values.'; '          [delaySteps >= 7000]';'                              or';'          [delayBlock >= nSteps*7000]';''; '2- The range of all the parameter must be correct.'}, 'Error', 'error');
+catch ME
+    dialogbox=msgbox(ME.message, 'Error', 'error');
     uiwait(dialogbox);
 end
+
+% Stop progress icon
+loopProgress(false);
+
+% Unblock the button
+set(handles.pushbuttonRun,'Enable','on');
 
 % --- Executes when user attempts to close figure1.
 function figure1_CloseRequestFcn(hObject, eventdata, handles)
@@ -166,9 +170,8 @@ end
 try
 	[handles.micro,handles.nDeviceNo,handles.nChildNo,handles.connected]=initConnections(handles.port);
 catch ME
-	errorMessage = sprintf('It is impossible to stablish the connection of the all setup components. Check the connections and try it again.', ME.message);
-	fprintf(1, '%s\n', errorMessage);
-	uiwait(warndlg(errorMessage));
+    dialogbox=msgbox(ME.message, 'Error', 'error');
+    uiwait(dialogbox);
 end
 
 if handles.connected == true

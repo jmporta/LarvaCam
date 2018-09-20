@@ -14,7 +14,8 @@ disp('Opening cam connection...');
 
 % Config cam
 disp('Configurating cam...');
-configCamera(nDeviceNo,nChildNo);
+%configCamera(nDeviceNo,nChildNo,framesToRec,framesRate,vWidth,vHeight);
+configCamera(nDeviceNo,nChildNo,framesToRec,framesRate,vWidth,vHeight);
 
 disp('Ready to run the experiment.')
 connected = true;
