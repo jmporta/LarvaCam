@@ -1,4 +1,4 @@
-function setEvents_noise(handles,amplitude, light,freq,freqStep,tEvents)
+function setEvents_noise(handles,amplitude, light,sfreq,freqStep,tEvents)
 
 % Set the discretization interval of the noise (dx)
 set_dac_sampling_freq(handles,freqStep);
@@ -22,11 +22,12 @@ event1_id=add_event(handles,tEvents(1)); %0.01 default
 
 event2_id=add_event(handles,tEvents(2)); %0.03 default
 action3_id=add_event_action(handles,event2_id,bitor(handles.r.NOISE_START,noise_id));
-action4_id=add_event_action(handles,event2_id,bitor(handles.r.LIGHT_START,light));
+if (light~=0)
+    action4_id=add_event_action(handles,event2_id,bitor(handles.r.LIGHT_START,50));
+end
 
 event3_id=add_event(handles,tEvents(3));%0.003 default
 action5_id=add_event_action(handles,event3_id,handles.r.NOISE_STOP);
-action6_id=add_event_action(handles,event3_id,handles.r.LIGHT_STOP);
 
 
 event4_id=add_event(handles,tEvents(4));%0.087 default

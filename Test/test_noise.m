@@ -27,10 +27,13 @@ freq=15;
 freqStep= 700;
 tEvents=[0.01 0.03 10 0.087];
 
+% Light
+light=50;
+
 
 % Loading the step events
 disp('Loading events...');
-setEvents_noise(micro,amplitude,freq,freqStep,tEvents);
+setEvents_noise(micro,amplitude,light,freq,freqStep,tEvents);
 
 %% Running the steps
 disp('Running steps...');
