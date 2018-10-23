@@ -15,12 +15,12 @@ for i=1:nBlocks
         ME=MException('WrongInput:error', 'The number of the steps must be positive.');
         throw(ME); 
     end
-    if light < 0 || light > 1
-        ME=MException('WrongInput:error', 'The light value must be in interval [0,1].');
+    if light ~= 0 && light ~= 1
+        ME=MException('WrongInput:error', 'The light value must be [0=OFF, 1=ON].');
         throw(ME); 
     end
-    if amplitude < 0
-        ME=MException('WrongInput:error', 'The max. acceleration must be positive.');
+    if amplitude ~= 0 && amplitude ~= 1 && amplitude ~= 2
+        ME=MException('WrongInput:error', 'The max. acceleration must be [0= None, 1=Soft, 2= Hard].');
         throw(ME); 
     end
     if delayBlock < tStep*nSteps && delayStep < tStep

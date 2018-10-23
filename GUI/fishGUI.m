@@ -62,7 +62,7 @@ handles.output = hObject;
 
 % Define the structure of the uitable
 handles.nColmn =5;
-set(handles.uitableData,'data',[1 0 0.5 7020 1000]);
+set(handles.uitableData,'data',[1 1 0 7020 1000]);
 
 % connection flag
 handles.connected=false; 
