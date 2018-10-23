@@ -51,7 +51,9 @@ for i=1:nBlocks
                 throw(ME); 
             end
         end
-        
+        if light == 1
+          light_stop(micro);
+        end
 end
 
 
