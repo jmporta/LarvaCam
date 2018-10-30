@@ -30,6 +30,7 @@ function handles=initDevice(port)
   handles.OS_Option.Actual=handles.OS_Option.Win64option;
   handles.AliasLib='dynamixel';
   handles.AliasLib_h='dynamixel.h';
+  handles.AliasLib_shared_h=@dynamixel_shared;
   
   % Added fields
   handles.id=1; % motor number 
@@ -40,7 +41,15 @@ function handles=initDevice(port)
     disp('The dynamixel lib is already loaded.');
   else
     disp('Loading dynamixel lib...');
-    loadlibrary(handles.AliasLib,handles.AliasLib_h);
+    if ~isdeployed
+       loadlibrary(handles.AliasLib,handles.AliasLib_h);
+    else
+       % Run "loadlibrary('dynamixel', 'dynamixel.h', 'mfilename',
+       % 'dynamixel_shared')" once to create a prototypefile. Save the
+       % resultant files "dynamixel_shared.m" and "dynamixel_thunk_*.dll"
+       % in a folder and add the path.
+       loadlibrary(handles.AliasLib, handles.AliasLib_shared_h)
+    end
   end
   
 %   % Show available dynamixel libs

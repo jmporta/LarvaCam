@@ -28,7 +28,7 @@ freqStep= 700;
 tEvents=[0.01 0.03 10 0.087];
 
 % Light
-light=50;
+light=99;
 
 
 % Loading the step events

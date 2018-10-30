@@ -23,18 +23,10 @@ action1_id=add_event_action(handles,event1_id,handles.r.CAMERA_START);
 
 
 event2_id=add_event(handles,tEvents(2)); %0.03 default
-if (light==1)
-    action3_id=add_event_action(handles,event2_id,handles.r.LIGHT_STOP);
-else
-    action3_id=add_event_action(handles,event2_id,bitor(handles.r.NOISE_START,noise_id));
-end
+action3_id=add_event_action(handles,event2_id,bitor(handles.r.NOISE_START,noise_id));
 
 event3_id=add_event(handles,tEvents(3));%0.003 default
-if (light==1)
-    action4_id=add_event_action(handles,event3_id,bitor(handles.r.LIGHT_START,99));
-else
-    action4_id=add_event_action(handles,event3_id,handles.r.NOISE_STOP);
-end
+action4_id=add_event_action(handles,event3_id,handles.r.NOISE_STOP);
 
 event4_id=add_event(handles,tEvents(4));%0.087 default
 action5_id=add_event_action(handles,event4_id,handles.r.CAMERA_STOP);

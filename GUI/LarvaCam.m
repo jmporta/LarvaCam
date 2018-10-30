@@ -1,35 +1,35 @@
-function varargout = fishGUI(varargin)
-% FISHGUI MATLAB code for fishGUI.fig
-%      FISHGUI, by itself, creates a new FISHGUI or raises the existing
+function varargout = LarvaCam(varargin)
+% LARVACAM MATLAB code for LarvaCam.fig
+%      LARVACAM, by itself, creates a new LARVACAM or raises the existing
 %      singleton*.
 %
-%      H = FISHGUI returns the handle to a new FISHGUI or the handle to
+%      H = LARVACAM returns the handle to a new LARVACAM or the handle to
 %      the existing singleton*.
 %
-%      FISHGUI('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in FISHGUI.M with the given input arguments.
+%      LARVACAM('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in LARVACAM.M with the given input arguments.
 %
-%      FISHGUI('Property','Value',...) creates a new FISHGUI or raises the
+%      LARVACAM('Property','Value',...) creates a new LARVACAM or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before fishGUI_OpeningFcn gets called.  An
+%      applied to the GUI before LarvaCam_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to fishGUI_OpeningFcn via varargin.
+%      stop.  All inputs are passed to LarvaCam_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help fishGUI
+% Edit the above text to modify the response to help LarvaCam
 
-% Last Modified by GUIDE v2.5 19-Sep-2018 10:35:27
+% Last Modified by GUIDE v2.5 30-Oct-2018 15:23:23
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @fishGUI_OpeningFcn, ...
-                   'gui_OutputFcn',  @fishGUI_OutputFcn, ...
+                   'gui_OpeningFcn', @LarvaCam_OpeningFcn, ...
+                   'gui_OutputFcn',  @LarvaCam_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,29 +44,41 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before fishGUI is made visible.
-function fishGUI_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before LarvaCam is made visible.
+function LarvaCam_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to fishGUI (see VARARGIN)
+% varargin   command line arguments to LarvaCam (see VARARGIN)
 
-% Choose default command line output for fishGUI
+% Choose default command line output for LarvaCam
 handles.output = hObject;
 
-% UIWAIT makes fishGUI wait for user response (see UIRESUME)
+% UIWAIT makes LarvaCam wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 %% Initial GUI Data
 
 % Define the structure of the uitable
 handles.nColmn =5;
-set(handles.uitableData,'data',[1 1 0 7020 1000]);
+
+% Set the default uitable experiment
+set(handles.popupmenuNumBlocks,'Value',1);
+set(handles.uitableData,'data',[1 1 0 6000 1000]);
+
+set(handles.popupmenuNumBlocks,'Value',4)
+set(handles.uitableData,'data',[10 1 1 20000 20000;
+                                10 1 2 20000 20000;
+                                30 1 2 1000 180000;
+                                30 1 2 20000 20000;]);
+
 
 % connection flag
-handles.connected=false; 
+handles.connected=false;
+handles.expID = 'DefaultID';
 
+disp('Loading init. config. file data...')
 %% Initial Cam Configuration
 try
     % Load cam config. data from file
@@ -109,14 +121,15 @@ if uint16((handles.camConf.framesToRec/handles.camConf.framesRate)*1000) < uint1
    set(handles.textConnect,'String','Invalid conf.');
    uiwait(dialogbox); 
 end
-    
+
+disp('Waiting for a connection...');
 
 % Update handles structure
 guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = fishGUI_OutputFcn(hObject, eventdata, handles) 
+function varargout = LarvaCam_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -141,11 +154,15 @@ set(handles.pushbuttonRun,'Enable','off');
 loopProgress(true);
 
 try
-    checkDataTable(tableData,handles.tStep) % Check the data table
+    disp('Checking the table data...');
+    checkDataTable(tableData,handles.tStep); % Check the data table
 
+    disp('Running the experiment...');
     % Run the experiment through a table
-    runExpTable(tableData,handles.freq,handles.freqStep,handles.tEvents,handles.tStep,handles.micro,handles.nDeviceNo,handles.nChildNo);
+    handles.expID = get(handles.editID,'String');
+    runExpTable(handles.expID,tableData,handles.freq,handles.freqStep,handles.tEvents,handles.tStep,handles.micro,handles.nDeviceNo,handles.nChildNo);
 
+    disp('Experiment DONE.');
     dialogbox=msgbox('Experiment done!', 'Success', 'help');
     uiwait(dialogbox);
     
@@ -199,6 +216,7 @@ end
 
 try
 	[handles.micro,handles.nDeviceNo,handles.nChildNo,handles.connected]=initConnections(handles.port,handles.camConf);
+    light_stop(handles.micro); %Close the light
 catch ME
     dialogbox=msgbox(ME.message, 'Error', 'error');
     set(handles.textConnect,'BackgroundColor','red');
@@ -247,3 +265,26 @@ function uitableData_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to uitableData (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
+
+
+
+function editID_Callback(hObject, eventdata, handles)
+% hObject    handle to editID (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editID as text
+%        str2double(get(hObject,'String')) returns contents of editID as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editID_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editID (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

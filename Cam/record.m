@@ -1,4 +1,4 @@
-function saveTime=record(nDeviceNo,nChildNo,handles,expId,nSteps,offset,delayStep)
+function saveTime=record(nDeviceNo,nChildNo,handles,expID,expInd,nSteps,offset,delayStep)
   global g
   
   % Set camera to trigger-waiting mode
@@ -6,9 +6,7 @@ function saveTime=record(nDeviceNo,nChildNo,handles,expId,nSteps,offset,delaySte
   checkError(nRet,nErrorCode);
   
   % Do the steps
-  disp(['Running steps of ',num2str(expId),' block...']);
   for i=1:nSteps
-    disp(['Step ',num2str(i-1+offset),': Events running...']);
     start_events(handles);
     
     done = false;
@@ -17,11 +15,9 @@ function saveTime=record(nDeviceNo,nChildNo,handles,expId,nSteps,offset,delaySte
     end
     
     java.lang.Thread.sleep(delayStep);
-    
-    disp(['Step ',num2str(i-1+offset),' done.']);
   end
-   t=clock;
-   disp('Steps done.');
+  
+  t=clock;
   
   % Stop recording status -> return to live status
   [nRet, nErrorCode] = PDC_SetStatus(nDeviceNo, g.PDC_STATUS_LIVE);
@@ -41,15 +37,12 @@ function saveTime=record(nDeviceNo,nChildNo,handles,expId,nSteps,offset,delaySte
   frameTrigger=(frame2-frame1+1)/nSteps; % frames at each trigger
   currentFrame=frame1-1; % First frame to save (numbering from 1!)
   
-  disp(['Num frames     : ' num2str(frame2-frame1+1)]);
-  disp(['Frames/trigger : ' num2str(frameTrigger)]);
-  
   % Save
  
-    vRate=uint32(30);
+  vRate=uint32(30);
     
     for it=1:nSteps
-        nlpszFileName=sprintf('expID_%u_step_%u.avi',expId,it-1+offset);
+        nlpszFileName=sprintf('%s_%u_step_%u.avi',expID,expInd,it-1+offset);
         
         disp(['Saving ' nlpszFileName]);
         
@@ -72,6 +65,5 @@ function saveTime=record(nDeviceNo,nChildNo,handles,expId,nSteps,offset,delaySte
   waitState(nDeviceNo,g.PDC_STATUS_LIVE);
   
   saveTime =etime(clock,t);
-  
-  disp(['Images saved in ' num2str(saveTime) ' sec']);
+  disp(['    -> Video/s saved in ' num2str(saveTime) ' s']);
 end

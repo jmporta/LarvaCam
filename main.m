@@ -10,4 +10,4 @@ initPaths;
 
 %% Launch Experiment GUI
 
-gui=fishGUI;
+gui=LarvaCam;

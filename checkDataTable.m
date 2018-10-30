@@ -20,11 +20,11 @@ for i=1:nBlocks
         throw(ME); 
     end
     if amplitude ~= 0 && amplitude ~= 1 && amplitude ~= 2
-        ME=MException('WrongInput:error', 'The max. acceleration must be [0= None, 1=Soft, 2= Hard].');
+        ME=MException('WrongInput:error', 'The max. acceleration must be [0=None, 1=Soft, 2= Hard].');
         throw(ME); 
     end
-    if delayBlock < tStep*nSteps && delayStep < tStep
-        ME=MException('WrongInput:error', 'Conflicting delay values. The time limit (tStep=%d ms) to save an image is smaller than the delay step (delayStep=%d ms).',tStep,delayStep);
+    if (delayBlock < tStep*nSteps) && (delayStep + 10 < tStep)
+        ME=MException('WrongInput:error', 'Conflicting delay values in block %i.\n \n If (delayBlock < tStep*nSteps) and (delayStep < tStep) the resultant video cannot be saved due to the limitation of the camera cache.\n\n Try to readjust the values or change the values of tStep=%d and/or the camera resolution.',i,tStep);
         throw(ME); 
     end
 
