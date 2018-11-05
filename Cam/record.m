@@ -1,4 +1,4 @@
-function saveTime=record(nDeviceNo,nChildNo,handles,expID,expInd,nSteps,offset,delayStep)
+function saveTime=record(nDeviceNo,nChildNo,handles,expID,expInd,nSteps,offset,delayStep,blockName,savePath)
   global g
   
   % Set camera to trigger-waiting mode
@@ -42,7 +42,7 @@ function saveTime=record(nDeviceNo,nChildNo,handles,expID,expInd,nSteps,offset,d
   vRate=uint32(30);
     
     for it=1:nSteps
-        nlpszFileName=sprintf('%s_%u_step_%u.avi',expID,expInd,it-1+offset);
+        nlpszFileName=sprintf(savePath + '%s_%u%s_step_%u.avi',expID,expInd,blockName,it-1+offset);
         
         disp(['Saving ' nlpszFileName]);
         

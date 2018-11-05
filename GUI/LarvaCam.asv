@@ -65,13 +65,13 @@ handles.nColmn =5;
 
 % Set the default uitable experiment
 set(handles.popupmenuNumBlocks,'Value',1);
-set(handles.uitableData,'data',[{'testName'} 1 1 0 6000 1000]);
+set(handles.uitableData,'data',['testName' 1 1 0 6000 1000]);
 
 set(handles.popupmenuNumBlocks,'Value',4)
-set(handles.uitableData,'data',[{'Sensitivity'} 10 1 1 20000 20000;
-                                {'PreHabituation'} 10 1 2 20000 20000;
-                                {'Habituation'} 30 1 2 1000 180000;
-                                {'Recovery'} 30 1 2 20000 20000;]);
+set(handles.uitableData,'data',[10 1 1 20000 20000;
+                                10 1 2 20000 20000;
+                                30 1 2 1000 180000;
+                                30 1 2 20000 20000;]);
 
 % connection flag
 handles.connected=false;
@@ -162,7 +162,7 @@ try
     disp('Running the experiment...');
     % Run the experiment through a table
     handles.expID = get(handles.editID,'String');
-    runExpTable(handles.expID,handles.savePath,tableData,handles.freq,handles.freqStep,handles.tEvents,handles.tStep,handles.micro,handles.nDeviceNo,handles.nChildNo);
+    runExpTable(handles.expID,tableData,handles.freq,handles.freqStep,handles.tEvents,handles.tStep,handles.micro,handles.nDeviceNo,handles.nChildNo);
 
     disp('Experiment DONE.');
     dialogbox=msgbox('Experiment done!', 'Success', 'help');

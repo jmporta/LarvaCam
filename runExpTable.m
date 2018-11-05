@@ -1,5 +1,5 @@
 % Run an experiment through a data table with amplitude,delayStep,delayBlock parameters 
-function runExpTable(expID,dataTable,freq,freqStep,tEvents,tStep,micro,nDeviceNo,nChildNo)
+function runExpTable(expID,savePath,dataTable,freq,freqStep,tEvents,tStep,micro,nDeviceNo,nChildNo)
 
 nBlocks=size(dataTable,1);
 
@@ -12,11 +12,12 @@ end
 for i=1:nBlocks
     offset=1;
         % Get the initial data
-        nSteps=dataTable(i,1);
-        light=dataTable(i,2);
-        amplitude=dataTable(i,3);
-        delayStep=dataTable(i,4)-10; % ms (0.01 s from the initial event delay)
-        delayBlock=dataTable(i,5); % ms
+        blockName=dataTable(i,1);
+        nSteps=dataTable(i,2);
+        light=dataTable(i,3);
+        amplitude=dataTable(i,4);
+        delayStep=dataTable(i,5)-10; % ms (0.01 s from the initial event delay)
+        delayBlock=dataTable(i,6); % ms
         
         % Convert the amplitude index to a firmware amplitude
         if amplitude == 0
@@ -34,12 +35,12 @@ for i=1:nBlocks
         % Run the events
         if nSteps ~= 0
             if delayBlock >= tStep*nSteps % all steps, save final
-                saveTime=record(nDeviceNo,nChildNo,micro,expID,i,nSteps,offset,delayStep);
+                saveTime=record(nDeviceNo,nChildNo,micro,expID,i,nSteps,offset,delayStep,blockName,savePath);
                 java.lang.Thread.sleep(delayBlock-saveTime*1000);
                 disp(delayBlock-saveTime*1000);
             elseif delayStep + 10 >= tStep % step by step, save on each step
                 for j=1:nSteps
-                     saveTime=record(nDeviceNo,nChildNo,micro,expID,i,1,offset,0);
+                     saveTime=record(nDeviceNo,nChildNo,micro,expID,i,1,offset,0,blockName,savePath);
                      offset=offset+1;
                      java.lang.Thread.sleep(delayStep-saveTime*1000);
                 end
