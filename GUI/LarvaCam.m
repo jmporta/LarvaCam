@@ -78,7 +78,8 @@ handles.connected=false;
 handles.expID = 'DefaultID';
 
 % Save path
-handles.savePath = 'C:\'
+handles.savePath = strcat(getenv('HOMEDRIVE'),getenv('HOMEPATH'));
+set(handles.pathBox, 'String', handles.savePath);
 
 disp('Loading init. config. file data...')
 %% Initial Cam Configuration
@@ -317,9 +318,16 @@ end
 
 % --- Executes on button press in selectPath.
 function selectPath_Callback(hObject, eventdata, handles)
-
-    handles.savePath = uigetdir('C:\');
-    set(handles.pathBox, 'String', handles.savePath)
+    defaultPath = strcat(getenv('HOMEDRIVE'),getenv('HOMEPATH'));
+   
+    handles.savePath = uigetdir(defaultPath);
+    
+    if (handles.savePath == 0)
+        handles.savePath = defaultPath;
+        set(handles.pathBox, 'String', defaultPath);
+    else
+        set(handles.pathBox, 'String', handles.savePath);
+    end
 % hObject    handle to selectPath (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
