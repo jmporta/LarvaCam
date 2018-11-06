@@ -61,7 +61,7 @@ handles.output = hObject;
 %% Initial GUI Data
 
 % Define the structure of the uitable
-handles.nColmn =5;
+handles.nColmn =6;
 
 % Set the default uitable experiment
 set(handles.popupmenuNumBlocks,'Value',1);
@@ -248,7 +248,7 @@ function popupmenuNumBlocks_Callback(hObject, eventdata, handles)
 
 % Set the number of  the blocks (rows)
 nRows = get(hObject,'Value');
-set(handles.uitableData,'data',zeros(nRows,handles.nColmn)); % Redifine the dimensions of the uitable
+set(handles.uitableData,'data',[{'blockName'} cell(nRows,handles.nColmn-1)]); % Redifine the dimensions of the uitable
 
 % --- Executes during object creation, after setting all properties.
 function popupmenuNumBlocks_CreateFcn(hObject, eventdata, handles)

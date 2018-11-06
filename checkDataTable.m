@@ -4,12 +4,12 @@ nBlocks = size(dataTable,1);
 
 for i=1:nBlocks
     
-    check=true;
-    nSteps=dataTable(i,1);
-    light=dataTable(i,2);
-    amplitude=dataTable(i,3);
-    delayStep = dataTable(i,4);
-    delayBlock = dataTable(i,5);
+    check = true;
+    nSteps = dataTable{i,2};
+    light = dataTable{i,3};
+    amplitude = dataTable{i,4};
+    delayStep = dataTable{i,5};
+    delayBlock = dataTable{i,6};
     
     if nSteps < 0
         ME=MException('WrongInput:error', 'The number of the steps must be positive.');

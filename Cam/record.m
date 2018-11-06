@@ -42,7 +42,7 @@ function saveTime=record(nDeviceNo,nChildNo,handles,expID,expInd,nSteps,offset,d
   vRate=uint32(30);
     
     for it=1:nSteps
-        nlpszFileName=sprintf(savePath + '%s_%u%s_step_%u.avi',expID,expInd,blockName,it-1+offset);
+        nlpszFileName=sprintf('%s\\%s_%u%s_step_%u.avi',savePath,expID,expInd,blockName,it-1+offset);
         
         disp(['Saving ' nlpszFileName]);
         

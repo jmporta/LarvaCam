@@ -3,21 +3,29 @@ function runExpTable(expID,savePath,dataTable,freq,freqStep,tEvents,tStep,micro,
 
 nBlocks=size(dataTable,1);
 
-
-if dataTable(:,2)
+% Detect the state of light
+power = true;
+for i=1:nBlocks
+    if dataTable{i,3} == 0
+        power = false;
+    end 
+end
+   
+if power
     light_set_duty_cycle(micro,99);
     light_start(micro);
-end    
+end
 
+% Computing the blocks
 for i=1:nBlocks
     offset=1;
         % Get the initial data
-        blockName=dataTable(i,1);
-        nSteps=dataTable(i,2);
-        light=dataTable(i,3);
-        amplitude=dataTable(i,4);
-        delayStep=dataTable(i,5)-10; % ms (0.01 s from the initial event delay)
-        delayBlock=dataTable(i,6); % ms
+        blockName=dataTable{i,1};
+        nSteps=dataTable{i,2};
+        light=dataTable{i,3};
+        amplitude=dataTable{i,4};
+        delayStep=dataTable{i,5}-10; % ms (0.01 s from the initial event delay)
+        delayBlock=dataTable{i,6}; % ms
         
         % Convert the amplitude index to a firmware amplitude
         if amplitude == 0
@@ -49,7 +57,7 @@ for i=1:nBlocks
         end
 end
 
-if dataTable(:,2)
+if power
     light_stop(micro);
 end
 
