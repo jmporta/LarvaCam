@@ -81,11 +81,22 @@ handles.expID = 'DefaultID';
 handles.savePath = strcat(getenv('HOMEDRIVE'),getenv('HOMEPATH'));
 set(handles.pathBox, 'String', handles.savePath);
 
+% Stablish the config files path
+if isdeployed 
+    % User is running an executable in standalone mode. 
+    [status, result] = system('set PATH');
+    execFolder = char(regexpi(result, 'Path=(.*?);', 'tokens', 'once'));
+    %fprintf(1, '\nIn function GetExecutableFolder(), currentWorkingDirectory = %s\n', executableFolder);
+else
+    %User is running an m-file from the MATLAB integrated development environment (regular MATLAB).
+    execFolder = pwd; 
+end
+
 disp('Loading init. config. file data...')
 %% Initial Cam Configuration
 try
     % Load cam config. data from file
-    cData=loadData('CamData.dat');
+    cData=loadData(strcat(execFolder,'\CamData.dat'));
     
     % Assign the data. The first row is the header, omitted.
     handles.camConf.framesToRec=cData(2);
@@ -93,14 +104,14 @@ try
     handles.camConf.vWidth=cData(4);
     handles.camConf.vHeight=cData(5);
 catch
-   dialogbox=msgbox('The config. file "camData.dat" does not has the proper format. Please, fix it and restart de program.', 'Wrong Data', 'warn');
+   dialogbox=msgbox('The config. file "camData.dat" does not has the proper format. Please, fix it and restart de program.', 'Wrong Data', 'error');
    uiwait(dialogbox);
 end
 
 %% Initial Experiment Conditions
 try
    % Load config. data from file
-   iData=loadData('initialData.dat');
+   iData=loadData(strcat(execFolder,'\initialData.dat'));
 
    % Assign the data. The first row is the header, omitted.
    handles.freq=iData(2); % freq of the wave (1000 default)
@@ -111,6 +122,7 @@ try
    handles.tStep = iData(9); % Limit time to save an image between event steps
 catch
    dialogbox=msgbox('The config. file "initialData.dat" does not has the proper format. Please, fix it and restart de program.', 'Wrong Data', 'error');
+   disp('ERROR: The config. file "initialData.dat" does not has the proper format. Please, fix it and restart de program.');
    set(handles.pushbuttonConnect,'Enable','off');
    set(handles.textConnect,'BackgroundColor','yellow');
    set(handles.textConnect,'String','Invalid conf.');
@@ -119,6 +131,7 @@ end
 
 if uint16((handles.camConf.framesToRec/handles.camConf.framesRate)*1000) < uint16((sum(handles.tEvents)-handles.tEvents(1))*1000)
    dialogbox=msgbox('The time of the event step is larger than the cam recording time: FramesToRec/framesRate < sum_i(tEvents(i)). Please, fix it on the config files and restart de program.', 'Wrong Data', 'error');
+   disp('ERROR: The time of the event step is larger than the cam recording time: FramesToRec/framesRate < sum_i(tEvents(i)). Please, fix it on the config files and restart de program.')
    set(handles.pushbuttonConnect,'Enable','off');
    set(handles.textConnect,'BackgroundColor','yellow');
    set(handles.textConnect,'String','Invalid conf.');
@@ -173,7 +186,7 @@ try
     set(handles.pushbuttonRun,'Enable','on');
 catch ME
     dialogbox=msgbox(ME.message, 'Error', 'error');
-    
+    disp(strcat('ERROR: ',ME.message));
     set(handles.textConnect,'BackgroundColor','red');
     set(handles.textConnect,'String','Not Connected');
     set(handles.pushbuttonRun,'Enable','off');
@@ -222,6 +235,7 @@ try
     light_stop(handles.micro); %Close the light
 catch ME
     dialogbox=msgbox(ME.message, 'Error', 'error');
+    disp(strcat('ERROR: ',ME.message));
     set(handles.textConnect,'BackgroundColor','red');
     set(handles.textConnect,'String','Not Connected');
     set(handles.pushbuttonRun,'Enable','off');
@@ -248,7 +262,7 @@ function popupmenuNumBlocks_Callback(hObject, eventdata, handles)
 
 % Set the number of  the blocks (rows)
 nRows = get(hObject,'Value');
-set(handles.uitableData,'data',[{'blockName'} cell(nRows,handles.nColmn-1)]); % Redifine the dimensions of the uitable
+set(handles.uitableData,'data',cell(nRows,handles.nColmn)); % Redifine the dimensions of the uitable
 
 % --- Executes during object creation, after setting all properties.
 function popupmenuNumBlocks_CreateFcn(hObject, eventdata, handles)

@@ -9,6 +9,7 @@ function initPaths
       addpath('Cam\libsPCD'); % CamPCD libs/functions path
       addpath('GUI'); % GUI path
       addpath('.\SharedLibsProt') % dll prototypes path
+      addpath('.\Patches') % patches for matlab bugs
     end
       
 end

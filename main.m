@@ -1,6 +1,6 @@
 %% Clean Memory Commands
 
-clear all; % Clean all the memory
+%clear all; % Clean all the memory
 clc; % Clear command window
 
 %% Load Paths
