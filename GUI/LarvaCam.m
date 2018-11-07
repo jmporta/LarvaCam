@@ -211,7 +211,6 @@ if handles.connected == true
 end
 % Hint: delete(hObject) closes the figure
 delete(hObject);
-clear all;
 
 
 % --- Executes on button press in pushbuttonConnect.
@@ -342,6 +341,8 @@ function selectPath_Callback(hObject, eventdata, handles)
     else
         set(handles.pathBox, 'String', handles.savePath);
     end
+    
+guidata(hObject, handles);
 % hObject    handle to selectPath (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)

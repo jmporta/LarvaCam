@@ -22,9 +22,9 @@ disp('Checking microcontroller connection...');
 ping(micro);
 
 % ampli: gain=30, varGain=max
-amplitude=0.6; %peak-to-peak
-freq=15;
-freqStep= 700;
+amplitude=3.3; % % 0.33(1V), 3.3(10V) peak-to-peak
+freq=1000; % 1000
+freqStep= 50000;
 tEvents=[0.01 0.03 10 0.087];
 
 % Light

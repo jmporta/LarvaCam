@@ -8,6 +8,6 @@ clc; % Clear command window
 disp('Loading environment...');
 initPaths;
 
-%% Launch Experiment GUI
+%% Launch Intro GUI
 
-gui=LarvaCam;
+gui=intro;

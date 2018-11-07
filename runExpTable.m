@@ -45,7 +45,6 @@ for i=1:nBlocks
             if delayBlock >= tStep*nSteps % all steps, save final
                 saveTime=record(nDeviceNo,nChildNo,micro,expID,i,nSteps,offset,delayStep,blockName,savePath);
                 java.lang.Thread.sleep(delayBlock-saveTime*1000);
-                disp(delayBlock-saveTime*1000);
             elseif delayStep + 10 >= tStep % step by step, save on each step
                 for j=1:nSteps
                      saveTime=record(nDeviceNo,nChildNo,micro,expID,i,1,offset,0,blockName,savePath);
