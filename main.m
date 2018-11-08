@@ -8,6 +8,6 @@ clc; % Clear command window
 disp('Loading environment...');
 initPaths;
 
-%% Launch Intro GUI
+%% Launch Home GUI
 
-gui=intro;
+gui=Home;

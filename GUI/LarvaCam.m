@@ -64,9 +64,6 @@ handles.output = hObject;
 handles.nColmn =6;
 
 % Set the default uitable experiment
-set(handles.popupmenuNumBlocks,'Value',1);
-set(handles.uitableData,'data',[{'testName'} 1 1 0 6000 1000]);
-
 set(handles.popupmenuNumBlocks,'Value',4)
 set(handles.uitableData,'data',[{'Sensitivity'} 10 1 1 20000 20000;
                                 {'PreHabituation'} 10 1 2 20000 20000;
@@ -209,6 +206,7 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 if handles.connected == true
     closeConnections(handles.nDeviceNo,handles.micro);
 end
+disp('LarvaCam closed.');
 % Hint: delete(hObject) closes the figure
 delete(hObject);
 
@@ -261,7 +259,16 @@ function popupmenuNumBlocks_Callback(hObject, eventdata, handles)
 
 % Set the number of  the blocks (rows)
 nRows = get(hObject,'Value');
-set(handles.uitableData,'data',cell(nRows,handles.nColmn)); % Redifine the dimensions of the uitable
+if nRows == 1
+    set(handles.uitableData,'data',[{'testName'} 1 1 1 6000 1000]);
+elseif nRows == 4
+    set(handles.uitableData,'data',[{'Sensitivity'} 10 1 1 20000 20000;
+                                {'PreHabituation'} 10 1 2 20000 20000;
+                                {'Habituation'} 30 1 2 1000 180000;
+                                {'Recovery'} 30 1 2 20000 20000;]);
+else
+    set(handles.uitableData,'data',cell(nRows,handles.nColmn)); % Redifine the dimensions of the uitable
+end
 
 % --- Executes during object creation, after setting all properties.
 function popupmenuNumBlocks_CreateFcn(hObject, eventdata, handles)

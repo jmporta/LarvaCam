@@ -57,7 +57,7 @@ function [nDeviceNo, nChildNo]=initCamera
   checkError(nRet,nErrorCode);
   
   if  nDetectNumInfo.m_nDeviceNum == 0
-      ME=MException('DeviceUndetected:error','No cam detected. If the cam is already on, try to restart it.');
+      ME=MException('DeviceUndetected:error','No cam detected. If the cam is already on, try to restart the cam and the program.');
       throw(ME); 
   end
   

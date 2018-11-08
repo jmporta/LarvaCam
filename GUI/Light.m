@@ -22,7 +22,7 @@ function varargout = Light(varargin)
 
 % Edit the above text to modify the response to help Light
 
-% Last Modified by GUIDE v2.5 07-Nov-2018 16:29:38
+% Last Modified by GUIDE v2.5 08-Nov-2018 10:11:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -127,15 +127,6 @@ function offButton_Callback(hObject, eventdata, handles)
     guidata(hObject, handles);
 
 
-function Light_CloseRequestFcn(hObject, eventdata, handles)
-    if handles.power
-        light_stop(handles.micro);
-    end
-    if handles.connection
-        close_device(handles.micro);
-    end
-
-
 
 function portEdit_Callback(hObject, eventdata, handles)
 % hObject    handle to portEdit (see GCBO)
@@ -201,3 +192,19 @@ if handles.connected == true
 end
 
 guidata(hObject, handles);
+
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+if handles.power
+    light_stop(handles.micro);
+end
+if handles.connected
+    close_device(handles.micro);
+end
+disp('Light control closed.')
+% Hint: delete(hObject) closes the figure
+delete(hObject);
