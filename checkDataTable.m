@@ -24,7 +24,7 @@ for i=1:nBlocks
         throw(ME); 
     end
     if ~isnumeric(delayBlock) || isnan(delayBlock) || delayBlock < 0
-        ME=MException('WrongInput:error', 'The delayStage value must be a positive integer.');
+        ME=MException('WrongInput:error', 'The delayPhase value must be a positive integer.');
         throw(ME); 
     end
     if ~isnumeric(delayStep) || isnan(delayStep) || delayStep < 0
@@ -32,7 +32,7 @@ for i=1:nBlocks
         throw(ME); 
     end
     if (delayBlock < tStep*nSteps) && (delayStep + 10 < tStep)
-        ME=MException('WrongInput:error', 'Conflicting delay values in stage %i.\n \n If (delayStage < tStep*nSteps) and (delayStep < tStep) the resultant video cannot be saved due to the limitation of the camera cache.\n\n The tStep=%d is the limit video recording time. \n\n Try to readjust the values or change the current values of tStep and/or the camera resolution.',i,tStep);
+        ME=MException('WrongInput:error', 'Conflicting delay values in phase %i.\n \n If (delayPhase < tStep*nSteps) and (delayStep < tStep) the resultant video cannot be saved due to the limitation of the camera cache.\n\n The tStep=%d is the limit video recording time. \n\n Try to readjust the values or change the current values of tStep and/or the camera resolution.',i,tStep);
         throw(ME); 
     end
 

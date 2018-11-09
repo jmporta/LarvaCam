@@ -9,7 +9,7 @@
       <file>${PROJECT_ROOT}\LarvaCam_resources\icon_16.png</file>
     </param.icons>
     <param.version>1.0</param.version>
-    <param.authnamewatermark>Capitan Ahab</param.authnamewatermark>
+    <param.authnamewatermark>Captain Ahab</param.authnamewatermark>
     <param.email>capahab@iri.upc.edu</param.email>
     <param.company>Inst. de robòtica i informàtica industrial</param.company>
     <param.summary>Software to control the timing of biological experiments</param.summary>

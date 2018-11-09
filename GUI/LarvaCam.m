@@ -65,10 +65,10 @@ handles.nColmn =6;
 
 % Set the default uitable experiment
 set(handles.popupmenuNumBlocks,'Value',4)
-set(handles.uitableData,'data',[{'Sensitivity'} 10 1 1 20000 20000;
-                                {'PreHabituation'} 10 1 2 20000 20000;
+set(handles.uitableData,'data',[{'Sensitivity'} 10 1 1 20000 0;
+                                {'PreHabituation'} 10 1 2 20000 0;
                                 {'Habituation'} 30 1 2 1000 180000;
-                                {'Recovery'} 30 1 2 20000 20000;]);
+                                {'Recovery'} 10 1 2 20000 0;]);
 
 % connection flag
 handles.connected=false;
