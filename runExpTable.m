@@ -16,6 +16,10 @@ if power
     light_start(micro);
 end
 
+disp('Start habituation light...')
+java.lang.Thread.sleep(300000);
+disp('End habituation light.')
+
 % Computing the blocks
 for i=1:nBlocks
     offset=1;
@@ -31,9 +35,9 @@ for i=1:nBlocks
         if amplitude == 0
             amplitude = 0;
         elseif amplitude == 1
-            amplitude = 0.33; % amplitude to 1V
+            amplitude = 0.2; % amplitude to (0.33->1V)
         elseif amplitude == 2
-            amplitude = 3.3; % amplitude to 10V
+            amplitude = 2; % amplitude to (3.3->10V)
         end
         
         
