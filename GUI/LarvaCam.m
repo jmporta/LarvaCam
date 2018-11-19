@@ -22,7 +22,7 @@ function varargout = LarvaCam(varargin)
 
 % Edit the above text to modify the response to help LarvaCam
 
-% Last Modified by GUIDE v2.5 05-Nov-2018 12:49:10
+% Last Modified by GUIDE v2.5 19-Nov-2018 11:04:12
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -72,7 +72,13 @@ set(handles.uitableData,'data',[{'Sensitivity'} 10 1 1 20000 0;
 
 % connection flag
 handles.connected=false;
+
+handles.stop= false;
+% Experiment id default
 handles.expID = 'DefaultID';
+
+% Habituation light default (seconds)
+handles.habLight = 3000;
 
 % Save path
 handles.savePath = strcat(getenv('HOMEDRIVE'),getenv('HOMEPATH'));
@@ -173,7 +179,8 @@ try
     disp('Running the experiment...');
     % Run the experiment through a table
     handles.expID = get(handles.editID,'String');
-    runExpTable(handles.expID,handles.savePath,tableData,handles.freq,handles.freqStep,handles.tEvents,handles.tStep,handles.micro,handles.nDeviceNo,handles.nChildNo);
+    handles.habLight = get(handles.habLightText,'String');
+    runExpTable(handles.expID,handles.habLight,handles.savePath,tableData,handles.freq,handles.freqStep,handles.tEvents,handles.tStep,handles.micro,handles.nDeviceNo,handles.nChildNo);
 
     disp('Experiment DONE.');
     dialogbox=msgbox('Experiment done!', 'Success', 'help');
@@ -353,3 +360,30 @@ guidata(hObject, handles);
 % hObject    handle to selectPath (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
+function habLightText_Callback(hObject, eventdata, handles)
+% hObject    handle to habLightText (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of habLightText as text
+%        str2double(get(hObject,'String')) returns contents of habLightText as a double
+    str = get(hObject,'String');
+    if isempty(str2num(str))
+        set(hObject,'string','3000');
+        warndlg('Habituation light input must be numerical.');
+    end
+
+% --- Executes during object creation, after setting all properties.
+function habLightText_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to habLightText (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

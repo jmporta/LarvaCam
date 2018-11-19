@@ -1,5 +1,5 @@
 % Run an experiment through a data table with amplitude,delayStep,delayBlock parameters 
-function runExpTable(expID,savePath,dataTable,freq,freqStep,tEvents,tStep,micro,nDeviceNo,nChildNo)
+function runExpTable(expID,habLight,savePath,dataTable,freq,freqStep,tEvents,tStep,micro,nDeviceNo,nChildNo)
 
 nBlocks=size(dataTable,1);
 
@@ -16,11 +16,12 @@ if power
     light_start(micro);
 end
 
-disp('Start habituation light...')
-java.lang.Thread.sleep(300000);
-disp('End habituation light.')
+disp('Start habituation light...');
+java.lang.Thread.sleep(habLight*1000);
+disp('End habituation light.');
 
 % Computing the blocks
+disp('Start experiment...');
 for i=1:nBlocks
     offset=1;
         % Get the initial data
@@ -63,5 +64,7 @@ end
 if power
     light_stop(micro);
 end
+
+disp('End experiment.');
 
 end
