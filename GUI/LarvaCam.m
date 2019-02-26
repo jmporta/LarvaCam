@@ -78,7 +78,7 @@ handles.stop= false;
 handles.expID = 'DefaultID';
 
 % Habituation light default (seconds)
-handles.habLight = 3000;
+handles.habLight = 300;
 
 % Save path
 handles.savePath = strcat(getenv('HOMEDRIVE'),getenv('HOMEPATH'));
