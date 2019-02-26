@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="3158285645" file="C:\Users\porta\Desktop\ZebraFishCam\LarvaCam.prj" location="C:\Users\porta\Desktop\ZebraFishCam" name="LarvaCam" preferred-package-location="C:\Users\porta\Desktop\ZebraFishCam\LarvaCam\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+  <configuration build-checksum="3158285645" file="C:\Users\porta\Desktop\larvacam\LarvaCam.prj" location="C:\Users\porta\Desktop\larvacam" name="LarvaCam" preferred-package-location="C:\Users\porta\Desktop\ZebraFishCam\LarvaCam\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>LarvaCam</param.appname>
     <param.icon>${PROJECT_ROOT}\LarvaCam_resources\icon.ico</param.icon>
     <param.icons>
@@ -14,12 +14,12 @@
     <param.company>Inst. de robòtica i informàtica industrial</param.company>
     <param.summary>Software to control the timing of biological experiments</param.summary>
     <param.description>The LarvaCam app executes fish behavior experiments, controlling the steps, the blocks and the shake intensity, and their timings.</param.description>
-    <param.screenshot>C:\Users\porta\Downloads\camera-cctv-control-274895.jpg</param.screenshot>
+    <param.screenshot>${PROJECT_ROOT}\LarvaCam_resources\rsc\camera-cctv-control-274895.jpg</param.screenshot>
     <param.guid />
     <param.installpath.string>\IRI\LarvaCam\</param.installpath.string>
     <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
-    <param.logo>C:\Users\porta\Downloads\camera-cctv-control-274895.jpg</param.logo>
-    <param.install.notes />
+    <param.logo>${PROJECT_ROOT}\LarvaCam_resources\rsc\camera-cctv-control-274895.jpg</param.logo>
+    <param.install.notes>Verify the microprocessor and the camera configuration after the installation. Read the readme.txt file for more information about it.</param.install.notes>
     <param.target.install.notes />
     <param.intermediate>${PROJECT_ROOT}\LarvaCam\for_testing</param.intermediate>
     <param.files.only>${PROJECT_ROOT}\LarvaCam\for_redistribution_files_only</param.files.only>
@@ -46,7 +46,6 @@
       <param.version />
       <param.guid />
       <param.installpath.combo />
-      <param.install.notes />
       <param.target.install.notes />
       <param.intermediate />
       <param.files.only />
@@ -93,9 +92,9 @@
       <file>${PROJECT_ROOT}\initPaths.m</file>
     </fileset.depfun>
     <build-deliverables>
-      <file location="${PROJECT_ROOT}\LarvaCam\for_testing" name="readme.txt" optional="true">C:\Users\porta\Desktop\ZebraFishCam\LarvaCam\for_testing\readme.txt</file>
-      <file location="${PROJECT_ROOT}\LarvaCam\for_testing" name="LarvaCam.exe" optional="false">C:\Users\porta\Desktop\ZebraFishCam\LarvaCam\for_testing\LarvaCam.exe</file>
-      <file location="${PROJECT_ROOT}\LarvaCam\for_testing" name="splash.png" optional="false">C:\Users\porta\Desktop\ZebraFishCam\LarvaCam\for_testing\splash.png</file>
+      <file location="${PROJECT_ROOT}\LarvaCam\for_testing" name="LarvaCam.exe" optional="false">C:\Users\porta\Desktop\larvacam\LarvaCam\for_testing\LarvaCam.exe</file>
+      <file location="${PROJECT_ROOT}\LarvaCam\for_testing" name="readme.txt" optional="true">C:\Users\porta\Desktop\larvacam\LarvaCam\for_testing\readme.txt</file>
+      <file location="${PROJECT_ROOT}\LarvaCam\for_testing" name="splash.png" optional="false">C:\Users\porta\Desktop\larvacam\LarvaCam\for_testing\splash.png</file>
     </build-deliverables>
     <workflow />
     <matlab>
