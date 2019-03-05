@@ -1,0 +1,19 @@
+LarvaCam Executable
+
+1. Prerequisites for execution 
+
+- Verify all the connections between the camera and the microprocessor. The trigger of the camera
+is INPUT2(DEF:TRIG TTL IN)
+
+- Verify the micropocessor and the camera configurations: You must change the microprocessor 
+connection port in "initialData.dat" after the installation. The microprocessor connection port
+in your computer can be obtained in the devices section of Windows control panel. The camera
+needs a static ip adress.
+
+- Verify that version 9.4 (R2018a) of the MATLAB Runtime is installed. Download and install
+the Windows version of the MATLAB Runtime for R2018a from the following link on the
+MathWorks website.
+
+
+
+
